@@ -169,11 +169,22 @@ class IntegerTypeTest {
 
     private int add(int left, int right) {
         // TODO: Please implement the method. Adding two numbers.
-        if (Integer.MAX_VALUE - left >= right) {
-            return left + right;
+        if (left > 0 && right > 0) {
+            if (Integer.MAX_VALUE - left >= right) {
+                return left + right;
+            }
+            throw new ArithmeticException();
         }
+        if (left < 0 && right < 0) {
+            if (Integer.MIN_VALUE - left <= right) {
+                return left + right;
+            }
+            throw new ArithmeticException();
+        }
+        return left + right;
+
         // The method should throw ArithmeticException if overflow or underflow happens.
-        throw new ArithmeticException();
+
     }
 
     /*
