@@ -134,9 +134,21 @@ class StringTest {
         // TODO: Create string using StringBuilder
         // <--Start
         StringBuilder builder = new StringBuilder();
-        builder.append("|---|\n");
-        builder.append("|   |\n");
-        builder.append("|---|\n");
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                if (j == 0 || j == width - 1) {
+                    builder.append('|');
+                } else {
+                    if (i == 1) {
+                        builder.append(' ');
+                    } else {
+                        builder.append('-');
+                    }
+                }
+
+            }
+            builder.append("\n");
+        }
         // --End-->
 
         final String expected =
@@ -224,7 +236,7 @@ class StringTest {
         // TODO: please write down the result directly.
         final int expectedCharLength = 39;
         // TODO: please call some method to calculate the result.
-        final int actualCodePointLength = 37;
+        final int actualCodePointLength = withSurrogatePairs.codePointCount(0, withSurrogatePairs.length());
         // --end-->
 
         assertEquals(expectedCharLength, withSurrogatePairs.length());

@@ -72,4 +72,16 @@ class BooleanOperatorsTest {
 
         assertEquals(expected, ~value);
     }
+
+    @Test
+    void should_check_bitwise_priority() {
+        final int value = 0x1234_1234;
+        final int operatorNumber1 = 0xffff_0000;
+        final int operatorNumber2 = 0x0000_ffff;
+
+        assertEquals(0x1234_1234, value | operatorNumber1 & operatorNumber2);
+        assertEquals(0x1234_ffff, value & operatorNumber1 | operatorNumber2);
+        assertEquals(0x0000_ffff, ~operatorNumber1 & operatorNumber2);
+        assertEquals(0x0000_ffff, ~operatorNumber1 | operatorNumber2);
+    }
 }
