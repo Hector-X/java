@@ -30,12 +30,14 @@ public class PersonForEquals {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof PersonForEquals)) return false;
-        PersonForEquals that = (PersonForEquals) o;
-        return yearOfBirth == that.yearOfBirth &&
-                Objects.equals(name, that.name);
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (this.getClass() != obj.getClass()) return false;
+        PersonForEquals that = (PersonForEquals) obj;
+        return that.name.equals(name) && that.yearOfBirth == yearOfBirth;
+
+
     }
 
     @Override

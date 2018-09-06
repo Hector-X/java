@@ -1,8 +1,6 @@
 package com.cultivation.javaBasic;
 
-import com.cultivation.javaBasic.util.Employee;
-import com.cultivation.javaBasic.util.MethodWithAnnotation;
-import com.cultivation.javaBasic.util.MyAnnotation;
+import com.cultivation.javaBasic.util.*;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Method;
@@ -34,7 +32,7 @@ class ReflectionTest {
 
         // TODO: please modify the following code to pass the test
         // <--start
-        final String expected = Employee.class.getName();
+        final String expected = "com.cultivation.javaBasic.util.Employee";
         // --end-->
 
         assertEquals(expected, employeeClass.getName());
