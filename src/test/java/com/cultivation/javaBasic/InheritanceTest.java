@@ -4,6 +4,7 @@ import com.cultivation.javaBasic.showYourIntelligence.PersonForEquals;
 import com.cultivation.javaBasic.util.*;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -233,6 +234,17 @@ class InheritanceTest {
         assertNotEquals(person.hashCode(), different1.hashCode());
         assertNotEquals(person.hashCode(), different2.hashCode());
         assertEquals(person.hashCode(), samePerson.hashCode());
+    }
+
+    @Test
+    void should_get_sorted_array() {
+        PersonForEquals james1990 = new PersonForEquals("James", (short) 1990);
+        PersonForEquals alice1990 = new PersonForEquals("Alice", (short) 1990);
+        PersonForEquals james1992 = new PersonForEquals("James", (short) 1992);
+
+        PersonForEquals[] persons = new PersonForEquals[]{james1990, alice1990, james1992};
+        Arrays.sort(persons);
+        assertArrayEquals(new PersonForEquals[]{alice1990, james1990, james1992}, persons);
     }
 }
 

@@ -1,6 +1,9 @@
 package com.cultivation.javaBasic;
 
-import com.cultivation.javaBasic.util.*;
+import com.cultivation.javaBasic.util.GenericFunc;
+import com.cultivation.javaBasic.util.StringFunc;
+import com.cultivation.javaBasic.util.ThisInClosure;
+import com.cultivation.javaBasic.util.ValueHolder;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

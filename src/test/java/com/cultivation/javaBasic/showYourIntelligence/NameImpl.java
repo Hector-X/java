@@ -8,7 +8,7 @@ public class NameImpl implements WithName, Person {
     public String getName() {
         // TODO: please modify the following code to pass the test
         // <--start
-        return "Person";
+        return Person.super.getName();
         // --end-->
     }
 }

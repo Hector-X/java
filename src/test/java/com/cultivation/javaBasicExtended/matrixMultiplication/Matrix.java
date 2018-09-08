@@ -1,9 +1,6 @@
 package com.cultivation.javaBasicExtended.matrixMultiplication;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 import java.util.Arrays;
-import java.util.Objects;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
 class Matrix {
@@ -16,14 +13,45 @@ class Matrix {
     public Matrix(int[][] matrixArray) {
         // TODO: please implement the constructor of a matrix.
         // <--start
-        throw new NotImplementedException();
+        if (matrixArray == null) {
+            throw new IllegalArgumentException("Raw matrix is null");
+        }
+        if (matrixArray.length == 0) {
+            throw new IllegalArgumentException("Raw matrix contains 0 row");
+        }
+        for (int i = 0; i < matrixArray.length; i++) {
+            if (matrixArray[i] == null) {
+                throw new IllegalArgumentException("Raw matrix contains null row");
+            } else if (matrixArray[i].length == 0) {
+                throw new IllegalArgumentException("At least one row of raw matrix contains 0 column");
+            } else if (i > 0 && matrixArray[i - 1].length != matrixArray[i].length) {
+                throw new IllegalArgumentException("Raw matrix is not rectangle");
+            }
+        }
+        storage = matrixArray;
         // --end-->
     }
 
     public static Matrix multiply(Matrix left, Matrix right) {
         // TODO: please implement the method to pass the tests.
         // <--start
-        throw new NotImplementedException();
+        if (left == null || right == null) {
+            throw new IllegalArgumentException();
+        }
+        if (left.columns() != right.rows()) {
+            throw new IllegalArgumentException();
+        }
+        final int[][] multiplyStorage = new int[left.rows()][right.columns()];
+        Matrix multiplyMatrix = new Matrix(multiplyStorage);
+        for (int rowIndex = 0; rowIndex < multiplyMatrix.rows(); rowIndex++) {
+            for (int colIndex = 0; colIndex < multiplyMatrix.columns(); colIndex++) {
+                for (int i = 0; i < left.columns(); i++) {
+                    multiplyStorage[rowIndex][colIndex] += left.storage[rowIndex][i] * right.storage[i][colIndex];
+                }
+            }
+        }
+
+        return multiplyMatrix;
         // --end-->
     }
 

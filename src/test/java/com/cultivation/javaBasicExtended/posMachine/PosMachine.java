@@ -11,13 +11,21 @@ public class PosMachine {
     public void readDataSource(Reader reader) throws IOException {
         // TODO: please implement the following method to pass the test
         // <--start
-        throw new NotImplementedException();
         // --end-->
     }
 
     public String printReceipt(String barcodeContent) throws IOException {
         // TODO: please implement the following method to pass the test
         // <--start
+        if (barcodeContent == null || barcodeContent.isEmpty() || barcodeContent.equals("[]")) {
+            String line = System.lineSeparator();
+                    return  "Receipts" + line +
+                            "------------------------------------------------------------" + line +
+                            "------------------------------------------------------------" + line +
+                            "Price: 0" + line;
+
+        }
+
         throw new NotImplementedException();
         // --end-->
     }

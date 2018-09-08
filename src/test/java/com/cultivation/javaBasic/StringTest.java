@@ -270,10 +270,17 @@ class StringTest {
     }
 
     private int[] getCodePointsFromString(String withSurrogatePairs) {
-        // TODO: please implement the method to the pass the test
-        // <--start
-        return withSurrogatePairs.codePoints().toArray();
-        // --end-->
+        if (withSurrogatePairs == null) {
+            return null;
+        }
+        int[] codePoints = new int[(int) withSurrogatePairs.codePoints().count()];
+        for (int charIndex = 0, codePointIndex = 0;
+             charIndex < withSurrogatePairs.length();
+             charIndex += Character.charCount(Character.codePointAt(withSurrogatePairs, charIndex))) {
+
+            codePoints[codePointIndex++] = withSurrogatePairs.codePointAt(charIndex);
+        }
+        return codePoints;
     }
 
     /*
