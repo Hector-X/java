@@ -1,4 +1,4 @@
-#Integer
+# Integer
 1. 整数的范围和整数所占长度有关。
 	- byte长度是8bit，所以范围是-128 ~ 127
 	- short长度是16bit，范围是-32768 ~ 32767
@@ -47,7 +47,7 @@
 
 10. 当不对数值显式规定类型时，默认都是int型
 
-#FloatingType
+# FloatingType
 
 1. float类型往往在数值后加上‘f’表示float类型，double是加‘d’，long是加‘L’。**大小写对类型没有影响，能用小写表示就用小写，long类型使用大写的L是因为小写l容易和大写I混淆**
 2. float transfer to int 需要显式转化，并直接向下取整。
@@ -61,13 +61,13 @@
 	- floor向下取整
 	- ceil向上取整
 
-#CharType
+# CharType
 
  1. char类型长度是16bit
  2. Java目前使用的UTF-16编码方式对Unicode编码，一个codePoint占2byte或4byte，**所以一个codePoint并不代表就是一个char**
 
  
-#BooleanOperators
+# BooleanOperators
 
 1. &&, &, ||, |之间的区别
 
@@ -83,7 +83,7 @@
 2. ~是按位非操作，以二进制展开，将0替换为1，1替换为0.
 3. bitwise_priority： ~ > & > |
 
-#String
+# String
 1. String is a final class, it can't be inherited.
 2. String 中是使用一个final char[]存储字符串，故我们平时对String的操作例如取子串，拼凑字符串并不是在原有的char[]上进行操作，而是新建一个char[]。**所以如果程序中需要对一段字符串进行过多操作，建议使用StringBuffer或StringBuilder。**
 3. StringBuffer是线程安全的，StringBuilder是非线程安全的
@@ -110,7 +110,7 @@
 	- h - hash code
 	- n - platform dependent line separator
 
-#Object
+# Object
 1. 对两个object使用==进行比较，本质上是比较两个对象内存中的地址。当使用equals时默认使用==进行比较，但当Class重写了equals方法那就按照重写中的规则比较
 2. java中的传递都是值传递。
 3. 方法定义中的参数为形参，也就是parameter。真正传过去的是实参，叫argument。
@@ -120,7 +120,7 @@
 7. 调用重载方法时遵循“就近原则”，并且装箱和拆箱过程发生在调用方法之后。
 8. **方法签名：只包括方法名和参数类型及顺序，不包括返回值**
 
-#Inheritance
+# Inheritance
 1. Object是所有类的父类
 2. 不管声明变量是什么类型，实际类型才是此变量的类型
 3. 子类实例化顺序。
@@ -144,7 +144,7 @@
 	- two objects hashcode same, not means equals
 	- two objects hashcode not same, can't be equal
 
-#Reflection
+# Reflection
 1. Class 的实例化对象是一个个.class。里面存储了某一个类的所有信息，包括field，function，等等。这是使用反射的最重要的媒介。
 2. 使用Class.forName()或者一个instance.getClass得到实例的Class实例
 3. 使用Class实例的newInstance()可以做到不使用构造函数便实例化对象
@@ -162,7 +162,7 @@
 	- 注解也有注解，比如@Target，用来表明此注解用在哪，方法？类？field？又比如@Retention，表示注解保存到什么时候
 10. newInstance()使用的是无参构造方法，当类中没有无参构造方法，可以使用Class.getDeclaredConstructor(String.class).newInstance("HERESMYARG")类似这种使用有参构造函数
 
-#Interface
+# Interface
 1. Java8开始支持接口中default方法实现，实现的的方法必须加上default的修饰符，**这个default和access modifier毫无关系**
 2. 接口中的静态方法并不会继承到实现接口的类中；
 3. 接口中的静态方法是可以继承到接口中；
@@ -174,7 +174,7 @@
 9. 重写compareto()时最好重写equals()，然后最好重写hashcode()
 10. 接口是不能被实例化的，强行说也不能。**即时使用匿名内部类那也不算**
 
-#lambda
+# lambda
 1. 主要功能是让代码更简洁，可读性更高
 2. 依赖于functional interface：只有一个abstract方法的接口
 3. 主要形式是 (args...) -> {方法体}；
