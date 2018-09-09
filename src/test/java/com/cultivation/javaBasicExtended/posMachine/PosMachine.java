@@ -6,10 +6,7 @@ import org.junit.platform.commons.util.StringUtils;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @SuppressWarnings({"WeakerAccess", "unused", "RedundantThrows"})
 public class PosMachine {
@@ -46,34 +43,36 @@ public class PosMachine {
                     receiptSplitLine +
                     String.format(receiptFooter, 0);
         }
+        LinkedHashMap<Product, Integer> totalBuyProducts = new LinkedHashMap<>();
         List<List<Product>> needToPayItems = new ArrayList<>();
         List<String> barCodes = new ObjectMapper().readValue(barcodeContent, new TypeReference<List<String>>() {
         });
         barCodes.forEach(code ->
             {
-                List<Product> products = productList.stream()
-                        .filter(p -> p.getId().equals(code))
-                        .collect(Collectors.toList());
-
-                boolean isFound = false;
-                for (List<Product> items : needToPayItems) {
-                    if (items.get(0).equals(products.get(0))) {
-                        items.add(products.get(0));
-                        isFound = true;
+                Product buyProduct = new Product();
+                for (int index = 0; index < productList.size(); index++) {
+                    if (productList.get(index).getId().equals(code)) {
+                        buyProduct = productList.get(index);
+                        break;
                     }
                 }
-                if (!isFound) {
-                    needToPayItems.add(products);
+                if (totalBuyProducts.containsKey(buyProduct)) {
+                    totalBuyProducts.put(buyProduct, totalBuyProducts.get(buyProduct) + 1);
+                } else {
+                    totalBuyProducts.put(buyProduct, 1);
                 }
             });
-        needToPayItems.stream().distinct();
+        final int[] totalPrice = {0};
         StringBuilder receiptBody = new StringBuilder();
-        needToPayItems.forEach(items -> receiptBody.append(String.format(receiptBodyFormat, items.get(0).getName(), items.get(0).getPrice(), items.size())));
+        totalBuyProducts.forEach((product, integer) -> {
+            receiptBody.append(String.format(receiptBodyFormat, product.getName(), product.getPrice(), integer));
+            totalPrice[0] += product.getPrice() * integer;
+        });
         return receiptHeader +
                 receiptSplitLine +
                 receiptBody +
                 receiptSplitLine +
-                String.format(receiptFooter, needToPayItems.stream().mapToInt(items -> items.stream().mapToInt(Product::getPrice).sum()).sum());
+                String.format(receiptFooter, totalPrice[0]);
         // --end-->
     }
 }
