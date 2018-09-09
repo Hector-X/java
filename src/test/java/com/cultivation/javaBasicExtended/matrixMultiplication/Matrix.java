@@ -19,12 +19,12 @@ class Matrix {
         if (matrixArray.length == 0) {
             throw new IllegalArgumentException("Raw matrix contains 0 row");
         }
-        for (int i = 0; i < matrixArray.length; i++) {
-            if (matrixArray[i] == null) {
+        for (int rowIndex = 0; rowIndex < matrixArray.length; rowIndex++) {
+            if (matrixArray[rowIndex] == null) {
                 throw new IllegalArgumentException("Raw matrix contains null row");
-            } else if (matrixArray[i].length == 0) {
+            } else if (matrixArray[rowIndex].length == 0) {
                 throw new IllegalArgumentException("At least one row of raw matrix contains 0 column");
-            } else if (i > 0 && matrixArray[i - 1].length != matrixArray[i].length) {
+            } else if (rowIndex > 0 && matrixArray[rowIndex - 1].length != matrixArray[rowIndex].length) {
                 throw new IllegalArgumentException("Raw matrix is not rectangle");
             }
         }
