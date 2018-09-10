@@ -125,7 +125,7 @@
 2. 不管声明变量是什么类型，实际类型才是此变量的类型
 3. 子类实例化顺序。
 	- 先父类再子类
-	- 子类的构造函数中如果没有显式的调用自身或父类构造函数，此时会默认调用父类的无参构造函数，**即时子类调用的是有参构造函数**
+	- 子类的构造函数中如果没有显式的调用自身或父类构造函数，此时会默认调用父类的无参构造函数，**即使子类调用的是有参构造函数**
 	- 当子类的构造函数中显式的调用子类的其他构造函数时，会跳转到其他构造函数，同规则一，没有显式的调用父类构造函数会默认调用父类无参构造函数
 	- 当子类构造函数中显式调用了父类有参构造函数便不会再调用父类无参构造函数
 	- 当父类中显示的定义了有参构造方法但没有无参构造方法，此时在子类的构造方法中需要显示的使用super(args)构造方法。
@@ -138,6 +138,7 @@
 	- transitive传递性。x.equals(y) == true;y.equals(z) == true; ==> x.equals(z) == true
 	- consistent持续性。同样的比较不会随着时间结果变化
 	- 被比较object是null时，return false
+	- 两个参与比较的对象如果能强转或本身就是同一个class，再进行比较，否则 return false
 
 7. 重写了equals需要重写hashcode方法。
 	- two objects equals ,hashcode must be same
@@ -146,7 +147,7 @@
 
 # Reflection
 1. Class 的实例化对象是一个个.class。里面存储了某一个类的所有信息，包括field，function，等等。这是使用反射的最重要的媒介。
-2. 使用Class.forName()或者一个instance.getClass得到实例的Class实例
+2. 使用Class.forName()(**the fully qualified name of the desired class**)或者一个instance.getClass得到实例的Class实例
 3. 使用Class实例的newInstance()可以做到不使用构造函数便实例化对象
 4. Class.getDeclaredMethods()返回的是所有当前类自己declare的方法，不包括父类的方法。
 5. Class.getMethods()返回的是所有public方法，包括父类的方法
@@ -160,7 +161,7 @@
 9. 自定义一个注解
 	- 类名前需要加上@interface表明这是一个注解
 	- 注解也有注解，比如@Target，用来表明此注解用在哪，方法？类？field？又比如@Retention，表示注解保存到什么时候
-10. newInstance()使用的是无参构造方法，当类中没有无参构造方法，可以使用Class.getDeclaredConstructor(String.class).newInstance("HERESMYARG")类似这种使用有参构造函数
+10. newInstance()使用的是无参构造方法，当类中没有无参构造方法，可以使用instanceClass.getDeclaredConstructor(String.class).newInstance("HERESMYARG")类似这种使用有参构造函数
 
 # Interface
 1. Java8开始支持接口中default方法实现，实现的的方法必须加上default的修饰符，**这个default和access modifier毫无关系**
@@ -168,7 +169,7 @@
 3. 接口中的静态方法是可以继承到接口中；
 4. 接口中可以重写父接口的default方法
 5. 当一个类同时实现的两个接口，且两个接口有同样方法签名的方法，此时需要实现类显式重写这个方法，可以不管接口怎么实现的自己重新实现，也可以显式指定使用哪一个接口的实现方式
-6. 接口默认的access modifier是package-private，接口中方法默认是abstract
+6. 接口默认的access modifier是package-private，接口中方法默认且只能是public abstract
 7. 可以自己实现的只有default方法和static方法
 8. compareTo()返回值最好是-1和1和0
 9. 重写compareto()时最好重写equals()，然后最好重写hashcode()
