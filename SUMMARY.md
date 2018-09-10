@@ -20,7 +20,7 @@
 	- 需要显式强转
 	- 结果是直接取低位
 7. final变量（此处只针对Primitive Data），值不能再改变的变量。
-8. 类中的非final 的Primitive Data filed可以不初始化，会分配默认值。但在local variable时是必须初始化值的。
+8. 类中的非final 的Primitive Data field可以不初始化，会分配默认值。但在local variable时是必须初始化值的。
 
 	|   Data Type    | Default Value (for fields) |
 	| ---------------|----------------------------|
@@ -140,10 +140,10 @@
 	- 被比较object是null时，return false
 	- 两个参与比较的对象如果能强转或本身就是同一个class，再进行比较，否则 return false
 
-7. 重写了equals需要重写hashcode方法。
-	- two objects equals ,hashcode must be same
-	- two objects hashcode same, not means equals
-	- two objects hashcode not same, can't be equal
+7. 重写了equals需要重写hashCode方法。
+	- two objects equals ,hashCode must be same
+	- two objects hashCode same, not means equals
+	- two objects hashCode not same, can't be equal
 
 # Reflection
 1. Class 的实例化对象是一个个.class。里面存储了某一个类的所有信息，包括field，function，等等。这是使用反射的最重要的媒介。
