@@ -5,7 +5,6 @@ import com.cultivation.javaBasic.util.KeyValuePair;
 import com.cultivation.javaBasic.util.Manager;
 import com.cultivation.javaBasic.util.Pair;
 import org.junit.jupiter.api.Test;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.Optional;
 
@@ -19,7 +18,7 @@ class GenericTest {
 
         // TODO: please call getMiddle method for string
         // <--start
-        final String middle = null;
+        final String middle = getMiddle(words);
         // --end-->
 
         assertEquals("Good", middle);
@@ -42,7 +41,7 @@ class GenericTest {
 
         // TODO: please modify the following code to pass the test
         // <--start
-        final Optional<Boolean> expected = Optional.empty();
+        final Optional<Boolean> expected = Optional.of(true);
         // --end-->
 
         assertEquals(expected.get(), pair.getClass().equals(pairWithDifferentTypeParameter.getClass()));
@@ -64,7 +63,7 @@ class GenericTest {
 
         // TODO: please modify the following code to pass the test
         // <--start
-        final Optional<Boolean> expected = Optional.empty();
+        final Optional<Boolean> expected = Optional.of(true);
         // --end-->
 
         assertEquals(expected.get(), willThrow);
@@ -90,7 +89,14 @@ class GenericTest {
     // <--start
     @SuppressWarnings("unused")
     private static <T extends Number & Comparable<T>> T min(T[] values) {
-        throw new NotImplementedException();
+        if (values == null || values.length == 0) return null;
+        int minIndex = 0;
+        for (int i = 1; i < values.length; i++) {
+            if (values[i].compareTo(values[minIndex]) < 0) {
+                minIndex = i;
+            }
+        }
+        return values[minIndex];
     }
     // --end-->
 
@@ -98,12 +104,17 @@ class GenericTest {
     // <--start
     @SuppressWarnings("unused")
     private static void swap(Pair<?> pair) {
-        throw new NotImplementedException();
+        swapHelper(pair);
     }
 
     // TODO: You can add additional method within the range if you like
     // <--start
 
+    private static <T> void swapHelper(Pair<T> tPair) {
+        T first = tPair.getFirst();
+        tPair.setFirst(tPair.getSecond());
+        tPair.setSecond(first);
+    }
     // --end-->
 }
 
