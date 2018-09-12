@@ -1,8 +1,9 @@
 package com.cultivation.javaBasic.showYourIntelligence;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 
 public class DistinctIterable<T> implements Iterable<T> {
     private Iterable<T> iterable;
@@ -28,19 +29,21 @@ class DistinctIterator<E> implements Iterator<E> {
     // <--start
     @SuppressWarnings({"FieldCanBeLocal", "unused"})
     private final Iterator<E> iterator;
+    private final HashSet<E> distinctHashSet;
 
     DistinctIterator(Iterator<E> iterator) {
         this.iterator = iterator;
+        this.distinctHashSet = new HashSet<>();
     }
 
     @Override
     public boolean hasNext() {
-        throw new NotImplementedException();
+        return iterator.hasNext();
     }
 
     @Override
     public E next() {
-        throw new NotImplementedException();
+        return iterator.next();
     }
     // --end->
 }

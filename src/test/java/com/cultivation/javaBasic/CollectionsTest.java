@@ -4,11 +4,10 @@ import com.cultivation.javaBasic.showYourIntelligence.DistinctIterable;
 import com.cultivation.javaBasic.showYourIntelligence.Sequence;
 import com.cultivation.javaBasic.util.RandomCharacterIterable;
 import org.junit.jupiter.api.Test;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertIterableEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class CollectionsTest {
     @Test
@@ -29,7 +28,9 @@ class CollectionsTest {
         // TODO: you could ONLY use `Iterator.hasNext` and `Iterator.next` API to copy items to a `List`. No `for` is
         // allowed.
         // <--start
-
+        while (iterator.hasNext()) {
+            list.add(iterator.next());
+        }
         // --end-->
 
         return list;
@@ -40,6 +41,54 @@ class CollectionsTest {
         Sequence sequence = new Sequence(4, 10);
         assertIterableEquals(Arrays.asList(4, 5, 6, 7, 8, 9), sequence);
     }
+
+    @Test
+    void should_get_15_yotta_byte() {
+        ArrayList<Double> yottaResults = new ArrayList<>();
+        YottaSequence yottaSequence = new YottaSequence((double) 1, Math.pow(2, 40));
+        yottaSequence.forEach(aDouble -> {
+            yottaResults.add(aDouble);
+        });
+        assertEquals(15, yottaResults.size());
+    }
+
+
+    class YottaSequence implements Iterable<Double> {
+
+        private final Double start;
+        private final Double end;
+
+        public YottaSequence(Double start, Double end) {
+            if (start >= end) { throw new IllegalArgumentException("Start must be smaller than End."); }
+            this.start = start;
+            this.end = end;
+        }
+        @Override
+        public Iterator<Double> iterator() {
+            return new YottaIterator(start, end);
+        }
+    }
+
+    class YottaIterator implements Iterator<Double> {
+
+        private final Double end;
+        private Double powNow;
+        public YottaIterator(Double start, Double end) {
+
+            this.powNow = Math.ceil(Math.pow(start, 1.0 / 10));
+            this.end = end;
+        }
+        @Override
+        public boolean hasNext() {
+            return Math.pow(powNow, 10) < end;
+        }
+
+        @Override
+        public Double next() {
+            return Math.pow(powNow++, 10);
+        }
+    }
+
 
     @Test
     void should_predict_linked_list_operation_result() {
@@ -57,7 +106,7 @@ class CollectionsTest {
 
         // TODO: please modify the following code to pass the test
         // <--start
-        final List<String> expected = Arrays.asList("I", "Don't", "Know");
+        final List<String> expected = Arrays.asList("Amy", "Bob", "Carl");
         // --end-->
 
         assertIterableEquals(expected, staff);
@@ -89,9 +138,11 @@ class CollectionsTest {
 
         // TODO: please modify the following code to pass the test
         // <--start
-        final List<Integer> expected = Arrays.asList(0, 0, 0);
+        final List<Integer> expected = Arrays.asList(0, 1, 2, 10, 11);
         // --end-->
 
+        Integer integer = 2;
+        assertFalse(integer == ++integer);
         assertIterableEquals(expected, integers);
     }
 }

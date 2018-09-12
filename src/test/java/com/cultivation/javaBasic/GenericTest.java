@@ -1,9 +1,6 @@
 package com.cultivation.javaBasic;
 
-import com.cultivation.javaBasic.util.Employee;
-import com.cultivation.javaBasic.util.KeyValuePair;
-import com.cultivation.javaBasic.util.Manager;
-import com.cultivation.javaBasic.util.Pair;
+import com.cultivation.javaBasic.util.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
@@ -18,16 +15,17 @@ class GenericTest {
 
         // TODO: please call getMiddle method for string
         // <--start
-        final String middle = getMiddle(words);
+        final String middle = getLast(words);
         // --end-->
 
-        assertEquals("Good", middle);
+        assertEquals("Morning", middle);
     }
 
     @Test
     void should_specify_a_type_restriction_on_typed_parameters() {
         int minimumInteger = min(new Integer[]{1, 2, 3});
         double minimumReal = min(new Double[]{1.2, 2.2, -1d});
+        String miniString = min(new String[]{"z", "s", "sz"});
 
         assertEquals(1, minimumInteger);
         assertEquals(-1d, minimumReal, 1.0E-05);
@@ -56,7 +54,7 @@ class GenericTest {
 
         boolean willThrow = false;
         try {
-            Manager first = managerPair.getFirst();
+            Manager first = (Manager) rawPair.getFirst();
         } catch (ClassCastException error) {
             willThrow = true;
         }
@@ -79,24 +77,44 @@ class GenericTest {
         assertEquals("Hello", pair.getSecond());
     }
 
-    @SuppressWarnings("unused")
-    private static <T> T getMiddle(T[] args) {
-        return args[args.length / 2];
+    @Test
+    void should_success_when_generic_is_sub_of_class_implements_interface() {
+        MySubInteger mySubInteger1 = new MySubInteger(2);
+        MySubInteger mySubInteger2 = new MySubInteger(1);
+        MySubInteger[] subIntegers = new MySubInteger[]{mySubInteger1, mySubInteger2};
+        assertEquals(mySubInteger2, getMin(subIntegers));
+    }
+
+    private static <T extends MySubInteger> T getMin(T[] array) {
+        if (array == null && array.length == 0) return null;
+        T result = array[0];
+        for (int index = 1; index < array.length; index++) {
+            if (result.compareTo(array[index]) > 0) {
+                result = array[index];
+            }
+        }
+        return result;
+    }
+
+    private <T> T getLast(T[] array) {
+        if (array == null || array.length == 0) {
+            return null;
+        }
+        return array[array.length - 1];
     }
 
     // TODO: please implement the following code to pass the test. It should be generic after all.
     // The method should only accept `Number` and the number should implement `Comparable<T>`
     // <--start
-    @SuppressWarnings("unused")
-    private static <T extends Number & Comparable<T>> T min(T[] values) {
-        if (values == null || values.length == 0) return null;
-        int minIndex = 0;
-        for (int i = 1; i < values.length; i++) {
-            if (values[i].compareTo(values[minIndex]) < 0) {
-                minIndex = i;
+    private static <T extends Comparable<T>> T min(T[] array) {
+        if (array == null && array.length == 0) return null;
+        T result = array[0];
+        for (int index = 1; index < array.length; index++) {
+            if (result.compareTo(array[index]) > 0) {
+                result = array[index];
             }
         }
-        return values[minIndex];
+        return result;
     }
     // --end-->
 
