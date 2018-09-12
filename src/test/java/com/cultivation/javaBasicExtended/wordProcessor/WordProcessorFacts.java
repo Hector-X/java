@@ -24,18 +24,6 @@ class WordProcessorFacts {
         }
     }
 
-//    @Test
-//    void should_return_true_when_input_char_is_letter() {
-//        TextProcessor textProcessor = new TextProcessor(10);
-//
-//        assertTrue(textProcessor.isValidCharacter('a'));
-//        assertTrue(textProcessor.isValidCharacter('z'));
-//        assertTrue(textProcessor.isValidCharacter('A'));
-//        assertTrue(textProcessor.isValidCharacter('Z'));
-//        assertTrue(textProcessor.isValidCharacter('h'));
-//        assertTrue(textProcessor.isValidCharacter('H'));
-//    }
-
     @Test
     void should_process_single_word() {
         String processed = new TextProcessor(10).process("word");

@@ -8,8 +8,9 @@ class TextProcessor {
     public static final String ERROR_WIDTH_OUT_OF_RANGE = "Width out of range.";
     public static final int MIN_WIDTH = 10;
     public static final int MAX_WIDTH = 80;
+
     private final TextProcessorSettings settings;
-    private TextProcessInfo textProcessInfo;
+    private final TextProcessImp textProcessImp;
 
     TextProcessor(int width) {
         this(width, null);
@@ -19,7 +20,7 @@ class TextProcessor {
         if (width < MIN_WIDTH || width > MAX_WIDTH) {
             throw new IllegalArgumentException(ERROR_WIDTH_OUT_OF_RANGE);
         }
-        textProcessInfo = new TextProcessInfo();
+        textProcessImp = new TextProcessImp();
         settings = new TextProcessorSettings(width, getWhitespaces(whitespaces));
     }
 
@@ -35,13 +36,11 @@ class TextProcessor {
         if (text == null || text.isEmpty()) {
             throw new IllegalArgumentException();
         }
-        textProcessInfo.isLetterBefore = settings.isValidLetter(text.charAt(0));
+        textProcessImp.isLetterBefore = settings.isValidLetter(text.charAt(0));
         List<Character> inputList = transformString2CharacterList(text);
-        inputList.forEach(character -> {
-            textProcessInfo.processImp(character);
-        });
-        textProcessInfo.addLineNumberComment();
-        return textProcessInfo.getProcessResult();
+        inputList.forEach(textProcessImp::processImp);
+        textProcessImp.addLineNumberComment();
+        return textProcessImp.getProcessResult();
 
         // --end-->
     }
@@ -59,35 +58,39 @@ class TextProcessor {
         return characters;
     }
 
-    class TextProcessInfo {
+    class TextProcessImp {
         static final String LINE_INDEX_END = ");";
         static final String LINE_INDEX_START = "(";
         static final String LINE_INDEX_SPILT = ",";
+
         private boolean isLetterBefore;
+
         private StringBuilder resultBuilder;
 
-        private int indexOfLine;
+        private int indexOfLine = 1;
 
         private int indexOfWidth;
 
         private ArrayList<Integer> lineIndexOfOneSegment;
 
-        public TextProcessInfo() {
-            this.isLetterBefore = false;
-            this.indexOfLine = 1;
-            this.indexOfWidth = 0;
+        public TextProcessImp() {
             this.lineIndexOfOneSegment = new ArrayList<>();
             resultBuilder = new StringBuilder();
         }
 
         private void processImp(Character character) {
             indexOfWidth++;
+            checkSegmentSameOrAddLineNumbers(character);
+            resultBuilder.append(character.toString());
+            updateStatusInfo();
+        }
+
+        private void checkSegmentSameOrAddLineNumbers(Character character) {
             boolean isLetterNow = settings.isValidLetter(character);
             if (!isLetterNow == isLetterBefore) {
                 addLineNumberComment();
             }
-            resultBuilder.append(character.toString());
-            updateInfo(isLetterNow);
+            isLetterBefore = isLetterNow;
         }
 
         private String getProcessResult() {
@@ -96,9 +99,7 @@ class TextProcessor {
             return result;
         }
 
-        private void updateInfo(boolean isLetterNow) {
-            isLetterBefore = isLetterNow;
-
+        private void updateStatusInfo() {
             lineIndexOfOneSegment.add(indexOfLine);
             if (indexOfWidth / settings.getWidth() > 0) {
                 indexOfWidth %= settings.getWidth();
