@@ -26,4 +26,8 @@ class TextProcessorSettings {
 
         return false;
     }
+
+    public  boolean isValidLetter(char c) {
+        return (c >= 'a' && c<='z') || (c >= 'A' && c <= 'Z');
+    }
 }
