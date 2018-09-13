@@ -191,3 +191,141 @@
 	|Reference to an instance method of a particular object|	containingObject::instanceMethodName|
 	|Reference to an instance method of an arbitrary object of a particular type|	ContainingType::methodName|
 	|Reference to a constructor|	ClassName::new|
+
+# InnerClass
+
+1. 内部类可以分为
+	- 成员内部类
+	- 局部内部类
+	- 匿名内部类
+	- 静态内部类（严格来说跟外部类没什么联系）
+
+2. 内部类可以访问到外部类的field 和 method（即使是private），但是外部类是不能直接访问内部类的field 和 方法；
+3. 针对规则2，静态内部类是不能获取外部类的非静态field和method的。
+4. 内部类实例化必须依赖于外部类的实例
+5. 为了防止field的shadow作用，需要显式的指定是哪一个field，比如
+
+	```
+	public class InnerClassUpdateField {
+    	private int year;
+
+    	public class YearIncrementer {
+        	private int year;
+        	public void increment() {
+            ++InnerClassUpdateField.this.year;
+        	}
+    	}
+    
+	}
+	```
+	此时若想对外部类的year进行自增操作，必须如上所写，如果写year++就会对内部类的year自增
+
+6. 规则4同样适用于局部内部类，匿名内部类。
+
+# Exception
+1. 自定义一个exception的时候通常override两个构造函数
+
+	```
+	public Exception() {
+        super();
+    }
+
+    public Exception(String message) {
+        super(message);
+    }
+    ```
+    
+2. 需要注意的是传参名为cause的构造函数，类型是Throwable，这代表一个exception拥有另一个exception的实例，也就是能指向其，无形中形成一个链式结构，这就是异常栈。
+3. 在try-catch-finally的结构中，finally块中的代码是一定会执行的，即使以上两个代码块中执行return操作。
+4. 在try-with-resources结构中，实现了AutoCloseable接口的类的实例化需写在try（）括号中， 不是说写在括号外就出错，而是写在括号外起不到autoClose的作用。
+5. try-with-resources最后执行close方法的顺序与其实例化顺序相反。
+6. throws exception 不属于方法签名
+7. Throwable有两个子类：
+	- Exception：用于指示一种合理的程序想去catch的条件。即它仅仅是一种程序运行条件，而非严重错误，并且鼓励用户程序去catch它。
+	- Error：用于标记严重错误。合理的应用程序不应该去try/catch这种错误。绝大多数的错误都是非正常的，就根本不该出现的。
+
+8. Exception中可以分为unchecked 和checked（这是一种官方说法，但在java并没有这两种类型的类）。unchecked表示不可检测的，也就是不可预测的，正常情况下是不会发生这些exception的，比如NullPointerException，ArrayStoreException。所以程序不需要我们显示将其catch或throws。
+9. 还有一种是但对于checked 异常，多为superClass 的某些方法主动抛出的，我们需要显式的throws或catch。（catch or specified）
+10. unchecked exceptions: 通常是如果一切正常的话本不该发生的异常，但是的确发生了。比如ArrayIndexOutOfBoundException, ClassCastException等。从语言本身的角度讲，程序不该去catch这类异常，虽然能够从诸如RuntimeException这样的异常中catch并恢复，但是并不鼓励终端程序员这么做，因为完全没要必要。**因为这类错误本身就是bug，应该被修复，出现此类错误时程序就应该立即停止执行。** 因此，面对Errors和unchecked exceptions应该让程序自动终止执行，程序员不该做诸如try/catch这样的事情，而是应该查明原因，修改代码逻辑。
+11. throws 和throw。throws是函数的声明，声明此函数可能会抛出这个异常，并交给调用这个方法的类处理。throw 抛出异常（即时）
+12. 父类方法没有抛出checked异常时，子类覆盖方法时就不能抛出一个checked异常
+
+#Generic
+1. 只有<T>标识的才叫泛型方法
+2. 泛型是为了在某些操作下忽略具体的class类型
+3. 当某一泛型类在实例化的声明类型未显式指定类时，此时称为RawType，默认会将Object作为泛型类型
+4. 当使用rawType时需要时刻注意放入其中的数据的实际类型，强转类型需要注意cast异常
+5. 通配符--？
+	- 通配符是不能声明class类型的，它只是一种符号并不代表任何类型
+	- 一般用在定义泛型边界类bounds
+	- 上边界Upper Bounded Wildcards，<? extends Class>
+	- 下边界Lower Bounded Wildcards，<? super Class>
+6. Wildcard Capture and Helper Methods。在某些方法中只有通配符，比如List<?>，这时候对list中元素进行操作，会报错，因为没有？这种类型。需要一个helper方法
+	
+	```
+	private <T> void helper(List<T> l) {
+        l.set(0, l.get(0));
+    }
+    ```
+ 
+7. 类型擦除，泛型在运行过程中，具体的泛型类型都会被擦除，所以这时候getclass都会得到原始类型
+8. 说到这个泛型标识符号里面对泛型进行边界定义的时候，如果有多个条件，使用&进行连接，并且如果有且只有一个是class，其他的是interface，class必须放在首位
+
+#Collections
+说到这个collections就不得不说到Iterator 和Iterable
+
+###Iterator， Iterable
+1. 这两货都是接口，唯一扯得上关系的是：在Iterable接口中有一个抽象方法返回Iterator
+2. 接上，至于为什么要返回一个Iterator接口呢，是因为集合中的类基本都实现了Iterable接口，而这些集合类使用for each进行遍历的时候需要用到Iterator。
+3. Iterator需要实现两个方法，hasNext、next
+4. 这两货还都是泛型接口，都只有一种泛型类型
+
+###其他
+1. LinkedList中的iterator实际是ListItr，其中是以一种双向链表数据结构实现的LinkedList
+
+	- add：在当前index处添加元素，并且将index++；
+	- previous：将index--
+	- next（），取出当前元素，并将index++；
+
+2. 使用sublist的非结构性操作都会同样作用在原List上
+3. 当使用iterator对一个集合进行遍历时，结构性的修改（add, remove）都会抛出快速失败的异常ConcurrentModificationException
+
+# stream
+1. arrays to stream : Arrays.stream(arrayInstance)
+2. collection to stream : collectionInstance.stream()
+3. 一个个的instance to stream : 
+	
+	```
+	public static<T> Stream<T> of(T... values)
+	```
+4.  经常使用到的functional interface
+	- Function\<T, R> ：R apply(T t) 表示传入T类型返回R类型，可以知道多用在类型转换时候，比如map,flatmap
+	- BiFunction\<T, U, R> : R apply(T t, U u); 传两个参数，返回一个值，可以用在collect中的combiner
+	- Supplier\<T> : T get() 表示不入参返回T类型数据，可知多用在新建、初始化的时候，比如generate, iterate
+	- Consumer\<T> : void accept(T t)表示传入T类型数据，返回void型。
+	- Predicate\<T> : boolean test(T t) 表示传入T类型参数，返回boolean值，多用来filter
+
+5. 生成一个无限长的stream
+
+	- 可以用generate（Supplier），这样会生成元素相同的unordered Stream；
+	- 可以用iterate（seed，UnaryOperator<T>一元操作符），这样得到一个ordered的Stream
+
+6. 说到ordered和unordered：
+
+	- If a stream is ordered, repeated execution of identical stream pipelines on an identical source will produce an identical result。所以有序并不代表自然序，而是保序的，对stream的操作每次都会得到相同的值。
+	- if it is not ordered, repeated execution might produce different results.unordered的stream重复的操作可能会得到不同的值
+
+7. stream是lazy的，在terminal操作之前的intermediate操作不会即时执行，只有terminal操作定义之后再开始按顺序执行
+8. intermediate操作会生成一个新stream返回，original stream会被提示close，其实并不是close，是重Link了
+9. skip（long n）顾名思义是跳过前n个元素，如果当前stream的maxSize < n，将会返回空stream
+10. filter（Predicate）对stream进行删选，同样是生成一个新的stream
+11. map（Function）对stream中元素进行转换，可以改变类型
+12. toArray有传参和无参两种重载，无参返回的是Object数组，有参中的IntFunction就会返回元素类型和Stream中相同的Array
+13.  limit（long n） 取stream的前n个元素
+14. concat（stream1，stream2）将两个stream合并
+15. distinct（）stream元素去重
+
+
+###未完待续
+
+

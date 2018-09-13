@@ -48,4 +48,10 @@ class WordProcessorFacts {
             processed
         );
     }
+
+    @Test
+    void should_process_long_words() {
+        String processed = new TextProcessor(10).process("abcdefghijabcdefghijabcdefghijab");
+        assertEquals("abcdefghijabcdefghijabcdefghijab(1,2,3,4);", processed);
+    }
 }
